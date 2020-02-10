@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>03-apply和call方法</title>
     <script>
-        /*
-        apply和call方法的作用:
-        专门用于修改方法内部的this
+        // apply和call方法的作用: 专门用于修改方法内部的this
+        // 格式:
+        // call(对象, 参数1, 参数2, ...);
+        // apply(对象, [数组]);
 
-        格式:
-        call(对象, 参数1, 参数2, ...);
-        apply(对象, [数组]);
-        */
-        function test() {
-            console.log(this);
-        }
+        // 例如1:
+        // function test() {
+        //     console.log(this); // window
+        // }
         // window.test();
-        var obj = {"name": "lnj2"};
-        /*
-        1.通过window.test找到test方法
-        2.通过apply(obj)将找到的test方法内部的this修改为自定义的对象
-        */
+        // var obj = { "name": "lnj2" };
+        // 需求1:
+        // 1.通过window.test找到test方法
+        // 2.通过apply(obj)将找到的test方法内部的this修改为自定义的对象
         // window.test.apply(obj);
         // window.test.call(obj);
 
-        function sum(a, b) {
-            console.log(this);
-            console.log(a + b);
-        }
+        // 例如2:
+        // function sum(a, b) {
+        //     console.log(this);
+        //     console.log(a + b);
+        // }
         // window.sum.call(obj, 1, 2);
-        /*
+        // window.sum.apply(obj, [3, 5]);
+        /* 分析如下：
         1.通过window.sum找到sum方法
         2.通过apply(obj)将找到的sum方法内部的this修改为自定义的对象
         3.将传入数组中的元素依次取出, 传递给形参
         */
-        // window.sum.apply(obj, [3, 5]);
+
 
         // var arr = [];
         // arr.push(1);
@@ -50,30 +50,45 @@
         */
         // [].push.apply(obj, arr);
         // console.log(obj);
+
+
         window.onload = function (ev) {
             // 系统自带的伪数组
             var res = document.querySelectorAll("div");
             // 自定义的伪数组
-            var obj = {0:"lnj", 1:"33", length: 2};
-            // var arr = []; // 真数组
-            // [].push.apply(arr, obj);
-            // console.log(arr);
-
-            // 如果想将伪数组转换为真数组那么可以使用如下方法
-            var arr = [].slice.call(obj);
+            var obj = { 0: "lnj", 1: "33", length: 2 };
+            var arr = []; // 真数组
+            [].push.apply(arr, obj);
             console.log(arr);
-            // var arr2 = [1, 3, 5, 7, 9];
+            // 注意：自定义的伪数组，使用[].push.apply(arr, obj)转换为真数组，在IE8及IE8以下的版本不兼容，但系统自带但伪数组就没问题
+            // 怎么解决？如下：
+
+            // 分析如下：
+            var arr2 = [1, 3, 5, 7, 9];
             // 如果slice方法什么参数都没有传递, 会将数组中的元素放到一个新的数组中原样返回
-            // var res2 = arr2.slice();
-            // var res2 = arr2.slice(2);
-            // var res2 = arr2.slice(2, 4);
-            // console.log(res2);
+            var res2 = arr2.slice();
+            // console.log(res2); // [1, 3, 5, 7, 9];
+            var res2 = arr2.slice(2);
+            // console.log(res2); // [5, 7, 9];
+            var res2 = arr2.slice(2, 4);
+            console.log(res2); // [7, 9];
+
+            // 如果想将伪数组转换为真数组那么可以使用如下方法：
+            var arr = [].slice.call(obj);
+            console.log(arr); // ["lnj", "33"]
+
+            // 得出结论：
+            // 真数组转伪数组，使用 [].push.apply(obj, arr);
+            // 伪数组转真数组，使用 [].slice.call(obj);
+
         }
     </script>
 </head>
+
 <body>
-<div>我是div</div>
-<div>我是div</div>
-<div>我是div</div>
+    <div>我是div</div>
+    <div>我是div</div>
+    <div>我是div</div>
 </body>
+
 </html>

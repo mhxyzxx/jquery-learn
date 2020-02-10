@@ -1,6 +1,5 @@
 (function (window, undefined) {
     var njQuery = function (selector) {
-        // console.log(new njQuery.prototype.init(selector))
         return new njQuery.prototype.init(selector);
     }
 
@@ -35,6 +34,7 @@
                     temp.innerHTML = selector;
                     // console.log(temp);
 
+                    /*
                     // 2.将创建好的一级元素添加到jQuery当中
                     console.log(temp.children) // 刚好符合官方的API,只找到一级元素放到jQuery对象中
                     for (var i = 0; i < temp.children.length; i++) {
@@ -42,8 +42,11 @@
                     }
                     // 3.给jQuery对象添加length属性
                     this.length = temp.children.length;
+                    */
+                    [].push.apply(this, temp.children);
                     // 4.返回加工好的this(jQuery)
                     // 此时此刻的this是njQuery对象
+                    console.log(this instanceof init);
                     return this;
                 }
             }

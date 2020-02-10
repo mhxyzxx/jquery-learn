@@ -45,7 +45,7 @@
                     [].push.apply(this, temp.children);
                     // 此时此刻的this是njQuery对象
                     // 4.返回加工好的this(jQuery)
-                    // return this;
+                    return this;
                 }
                 // 2.2判断是否是选择器
                 else{
