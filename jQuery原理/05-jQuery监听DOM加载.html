@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>05-jQuery监听DOM加载</title>
-    <script src="js/njQuery-1.0.0.js"></script>
+    <!-- <script src="js/njQuery-1.0.0.js"></script> -->
+    <script src="js/njQuery-1.0.0-copy.js"></script> 
     <script>
         /*
         onload事件会等到DOM元素加载完毕, 并且还会等到资源也加载完毕才会执行
         DOMContentLoaded事件只会等到DOM元素加载完毕就会执行回调
+        所以DOMContentLoaded的性能比onload好
+        但addEventListener 事件监听函数有兼容性，IE8及IE8以下版本不支持
         */
         /*
         window.onload = function (ev) {
@@ -21,22 +24,29 @@
             console.log("DOMContentLoaded");
         });
         */
-        /*
-        document.readyState属性有如下的状态
-        uninitialized - 还未开始载入
-        loading - 载入中
-        interactive - 已加载，文档与用户可以开始交互
-        complete - 载入完成
 
+
+        // IE8及IE8以下版本不支持DOMContentLoaded事件
+        // document.attachEvent("DOMContentLoaded"，function(){}) 
+        // 所以，通过下面状态码来实现：
+
+        /*
+        document.readyState属性有如下的状态：
+            uninitialized - 还未开始载入
+            loading - 载入中
+            interactive - 已加载，文档与用户可以开始交互
+            complete - 载入完成
         onreadystatechange事件就是专门用于监听document.readyState属性的改变的
         */
         /*
         document.attachEvent("onreadystatechange", function () {
+            // 如果不加下面判断，会打印四次，但我们只要加载完成后但。
             if(document.readyState == "complete"){
                 console.log("onreadystatechange");
             }
         });
         */
+
         $(function () {
             var res = document.querySelectorAll("div");
             console.log(res);

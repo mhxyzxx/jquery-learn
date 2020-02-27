@@ -25,7 +25,8 @@
             }
             // 2.方法处理
             else if (njQuery.isFunction(selector)) {
-                console.log('是方法');
+                // console.log('是方法');
+                njQuery.ready(selector);
             }
             // 3.字符串
             else if (njQuery.isString(selector)) {
@@ -143,6 +144,22 @@
         },
         isFunction: function (sele) {
             return typeof sele === "function";
+        },
+        ready: function (fn) {
+            // 判断DOM是否加载完毕
+            if (document.readyState == "complete") {
+                fn();
+            } else if (document.addEventListener) {
+                document.addEventListener("DOMContentLoaded", function () {
+                    fn();
+                });
+            } else {
+                document.attachEvent("onreadystatechange", function () {
+                    if (document.readyState == "complete") {
+                        fn();
+                    }
+                });
+            }
         }
     });
 
