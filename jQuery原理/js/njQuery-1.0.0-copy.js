@@ -46,7 +46,7 @@
                     [].push.apply(this, temp.children);
                     // 4.返回加工好的this(jQuery)
                     // 此时此刻的this是njQuery对象
-                    return this;
+                    // return this;
                 }
                 // 2.2判断是否是选择器
                 else {
@@ -62,12 +62,14 @@
                     // 2和3合并可使用下面方法：
                     [].push.apply(this, res);
                     // 3.返回加工上的this
-                    return this;
+                    // return this;
                 }
             }
             // 3. 数组
-            else if (typeof selector === "object" && "length" in selector && selector !== window) {
+            // else if (typeof selector === "object" && "length" in selector && selector !== window) {
+            else if (njQuery.isArray(selector)) {
                 // console.log('是数组');
+                /*
                 // 3.1 真数组
                 if(({}).toString.apply(selector) === "[object Array]"){
                     [].push.apply(this, selector);
@@ -81,7 +83,21 @@
                     [].push.apply(this, arr);
                     return this;
                 }
+                */
+                // 将自定义的伪数组转换为真数组
+                var arr = [].slice.call(selector);
+                // 将真数组转换为伪数组
+                [].push.apply(this, arr);
+                // return this;
             }
+            // 4.除上述类型以外
+            else {
+                this[0] = selector;
+                this.length = 1;
+                // return this;
+            }
+
+            return this;
 
         }
     }
@@ -92,7 +108,7 @@
         return str.charAt(0) == '<' && str.charAt(str.length - 1) == ">" && str.length >= 3;
     }
     njQuery.trim = function (str) { // 去除前后空格，并实现trim的兼容性问题；trim()方法兼容ie9+版本
-        if(!njQuery.isString(str)){
+        if (!njQuery.isString(str)) {
             return str;
         }
         // 判断是否支持trim方法
@@ -102,6 +118,20 @@
             return str.replace(/^\s+|\s+$/g, "");
         }
     }
+    njQuery.isObject = function (sele) {
+        return typeof sele === "object"
+    },
+        njQuery.isWindow = function (sele) {
+            return sele === window;
+        },
+        njQuery.isArray = function (sele) {
+            if (njQuery.isObject(sele) &&
+                !njQuery.isWindow(sele) &&
+                "length" in sele) {
+                return true;
+            }
+            return false;
+        }
 
     njQuery.prototype.init.prototype = njQuery.prototype;
     window.njQuery = window.$ = njQuery;

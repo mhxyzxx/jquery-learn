@@ -29,7 +29,7 @@
          */
         //  1.传入 '' null undefined NaN  0  false
         // 会返回一个空的jQuery对象给我们
-        // console.log($());
+        console.log($());
         // console.log($(''));
         // console.log($(null));
         // console.log($(undefined));
@@ -39,12 +39,12 @@
 
         // 2.传入html片段
         // 会将创建好的DOM元素存储到jQuery对象中返回
-        // console.log($('<p>1</p><p>2</p><p>3</p>'));
+        console.log($('<p>1</p><p>2</p><p>3</p>'));
         // console.log($('  <div><p>1</p></div><div><p>2</p></div>   '));
 
         // 3.传入选择器
         // 会将找到的所有元素存储到jQuery对象中返回
-        // console.log($('li'));
+        console.log($('li'));
  
         // 4.传入数组
         // 会将数组中存储的元素依次存储到jQuery对象中立返回
@@ -64,17 +64,17 @@
 
         // 6.传入对象
         // 会将传入的对象存储到jQuery对象中返回
-        // function Person() {}
-        // console.log($(new Person()));
+        function Person() {}
+        console.log($(new Person()));
 
         // 7.传入DOM元素
         // 会将传入的DOM元素存储到jQuery对象中返回
-        // console.log($(document.createElement('div')));
+        console.log($(document.createElement('div')));
 
         // 8.传入基本数据类型
         // 会将传入的基本数据类型存储到jQuery对象中返回
-        // console.log($(123));
-        // console.log($(true));
+        console.log($(123));
+        console.log($(true));
 
         /*总结如下：
          1.传入 '' null undefined NaN  0  false, 返回空的jQuery对象
