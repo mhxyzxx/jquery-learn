@@ -12,7 +12,7 @@
             // 此时此刻的this就是njQuery这个类
             // console.log(this);
             for(var key in obj){
-                // njQuery["isTest"] = function () {console.log("test");}
+                // 相当于njQuery["isTest"] = function () {console.log("test");}
                 this[key] = obj[key];
             }
         }
@@ -23,6 +23,7 @@
         });
         njQuery.isTest();
         */
+
         /*
         njQuery.prototype.extend = function (obj) {
             // 此时此刻的this是njQuery对象
@@ -41,6 +42,11 @@
         q.isDemo();
         */
 
+        // 总结：
+        // 通过njQuery.isTest() 是调用的类的静态方法
+        // 通过q.isDemo() 是调用的实例方法
+
+        // 由jq库代码可知：如下：
         njQuery.extend = njQuery.prototype.extend = function (obj) {
             // console.log(this);
             for(var key in obj){

@@ -23,7 +23,11 @@
             if (!selector) {
                 return this;
             }
-            // 2.字符串
+            // 2.方法处理
+            else if (njQuery.isFunction(selector)) {
+                console.log('是方法');
+            }
+            // 3.字符串
             else if (njQuery.isString(selector)) {
                 // 2.1 如果是代码片段，注意判断最短长度为3
                 if (njQuery.isHTML(selector)) {
@@ -65,7 +69,7 @@
                     // return this;
                 }
             }
-            // 3. 数组
+            // 4. 数组
             // else if (typeof selector === "object" && "length" in selector && selector !== window) {
             else if (njQuery.isArray(selector)) {
                 // console.log('是数组');
@@ -90,48 +94,58 @@
                 [].push.apply(this, arr);
                 // return this;
             }
-            // 4.除上述类型以外
+            // 5.除上述类型以外
             else {
                 this[0] = selector;
                 this.length = 1;
                 // return this;
             }
-
             return this;
 
         }
     }
-    njQuery.isString = function (str) { // 判断是不是字符串
-        return typeof str == 'string';
-    }
-    njQuery.isHTML = function (str) { // 判断是不是代码片段
-        return str.charAt(0) == '<' && str.charAt(str.length - 1) == ">" && str.length >= 3;
-    }
-    njQuery.trim = function (str) { // 去除前后空格，并实现trim的兼容性问题；trim()方法兼容ie9+版本
-        if (!njQuery.isString(str)) {
-            return str;
-        }
-        // 判断是否支持trim方法
-        if (str.trim) {
-            return str.trim();
-        } else { // 把正则表达式匹配到元素，替换成空字符串；
-            return str.replace(/^\s+|\s+$/g, "");
+    njQuery.extend = njQuery.prototype.extend = function (obj) {
+        for (var key in obj) {
+            this[key] = obj[key];
         }
     }
-    njQuery.isObject = function (sele) {
-        return typeof sele === "object"
-    },
-        njQuery.isWindow = function (sele) {
+    njQuery.extend({
+        isString: function (str) { // 判断是不是字符串
+            return typeof str == 'string';
+        },
+        isHTML: function (str) { // 判断是不是代码片段
+            return str.charAt(0) == '<' && str.charAt(str.length - 1) == ">" && str.length >= 3;
+        },
+        trim: function (str) { // 去除前后空格，并实现trim的兼容性问题；trim()方法兼容ie9+版本
+            if (!njQuery.isString(str)) {
+                return str;
+            }
+            // 判断是否支持trim方法
+            if (str.trim) {
+                return str.trim();
+            } else { // 把正则表达式匹配到元素，替换成空字符串；
+                return str.replace(/^\s+|\s+$/g, "");
+            }
+        },
+        isObject: function (sele) {
+            return typeof sele === "object"
+        },
+        isWindow: function (sele) {
             return sele === window;
         },
-        njQuery.isArray = function (sele) {
+        isArray: function (sele) {
             if (njQuery.isObject(sele) &&
                 !njQuery.isWindow(sele) &&
                 "length" in sele) {
                 return true;
             }
             return false;
+        },
+        isFunction: function (sele) {
+            return typeof sele === "function";
         }
+    });
+
 
     njQuery.prototype.init.prototype = njQuery.prototype;
     window.njQuery = window.$ = njQuery;
