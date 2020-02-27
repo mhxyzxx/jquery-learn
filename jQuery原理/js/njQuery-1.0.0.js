@@ -51,10 +51,11 @@
                 else{
                     // 1.根据传入的选择器找到对应的元素
                     var res = document.querySelectorAll(selector);
+                    console.log(res);
                     // 2.将找到的元素添加到njQuery上
                     [].push.apply(this, res);
                     // 3.返回加工上的this
-                    // return this;
+                    return this;
                 }
             }
             // 4.数组

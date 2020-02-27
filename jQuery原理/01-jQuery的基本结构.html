@@ -13,9 +13,13 @@
            window.xxx = xxx;
         4.jQuery为什么要给自己传递一个window参数?
            为了方便后期压缩代码
+           例如：我们jq的压缩代码，如果不传入参数，压缩代码后，我们并不知道w代表的是什么，如过传入实参，就知道它代表的是什么。
            为了提升查找的效率
+           例如：我们的函数查找变量的原则是先从自己查找，找不到了，再往上查找。那么，如果我们传入window，那么，以后我们使用window，我们直接先从自己查找，就不用一层一层的往上查找，提高查找的效率。
         5.jQuery为什么要给自己接收一个undefined参数?
            为了方便后期压缩代码
+           例如：你不写undefined,代码压缩，你不知带t代表的是什么，如果传入了，那么，有t的地方就代表undefined
+           还有一个原因，如下：
            IE9以下的浏览器undefined可以被修改, 为了保证内部使用的undefined不被修改, 所以需要接收一个正确的undefined
         */
 
@@ -52,15 +56,15 @@
 
         // 3.jQuery如何让外界访问内部定义的局部变量
         // window.xxx = xxx;
-        // var num1, num2, num3;
-        // (function f1() {
-        //     var num = 10;
-        //     window.num = num;
-        // })();
-        // (function f2() {
-        //     var num = 20;
-        // })();
-        // console.log(num);
+        var num1, num2, num3;
+        (function f1() {
+            var num = 10;
+            window.num = num;
+        })();
+        (function f2() {
+            var num = 20;
+        })();
+        console.log(num);
 
         // 4.jQuery为什么要给自己传递一个window参数?
         //    为了方便后期压缩代码，原因：如果我们不给它传递window参数，那么，代码压缩后，我们并不知道w代表的是什么。如下，代码：
@@ -83,20 +87,24 @@
         //    为了方便后期压缩代码
         //    IE9以下的浏览器undefined可以被修改, 为了保证内部使用的undefined不被修改, 所以需要接收一个正确的undefined
         // undefined = 998;
-        // console.log(undefined);
+        // console.log(undefined); // undefined
 
         // 下面是自己编写的一个jQuery框架的搭建，如下：
-        (function (window, undefined) {
-            var jQuery = function () {
-                return new jQuery.prototype.init();
-            }
-            jQuery.prototype = {
-                constructor: jQuery
-            }
-            // 为了使jQuery.prototype.init()创建的对象，能够使用jQuery中的方法，我们让jQuery的原型等于jQuery.prototype.init的原型
-            jQuery.prototype.init.prototype = jQuery.prototype;
-            window.jQuery = window.$ = jQuery;
-        })(window);
+        // (function (window, undefined) {
+        //     var jQuery = function () {
+        //         return new jQuery.prototype.init();
+        //     }
+        //     jQuery.prototype = {
+        //         constructor: jQuery,
+        //         init: function () { 
+        //             return this;
+        //         }
+        //     }
+        //     console.log(jQuery())
+        //     // 为了使jQuery.prototype.init()创建的对象，能够调用Query中的方法，我们让jQuery的原型等于jQuery.prototype.init的原型
+        //     jQuery.prototype.init.prototype = jQuery.prototype;
+        //     window.jQuery = window.$ = jQuery;
+        // })(window);
 
     </script>
 </head>

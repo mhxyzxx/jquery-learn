@@ -46,7 +46,39 @@
                     [].push.apply(this, temp.children);
                     // 4.返回加工好的this(jQuery)
                     // 此时此刻的this是njQuery对象
-                    console.log(this instanceof init);
+                    return this;
+                }
+                // 2.2判断是否是选择器
+                else {
+                    // 1.根据传入的选择器找到对应的元素
+                    var res = document.querySelectorAll(selector);
+                    console.log(res);
+                    // 2.将找到的元素添加到njQuery上
+                    // for (var i = 0; i < res.length; i++) {
+                    //     this[i] = res[i]
+                    // }
+                    // 3.给jQuery对象添加length属性
+                    // this.length = res.length;
+                    // 2和3合并可使用下面方法：
+                    [].push.apply(this, res);
+                    // 3.返回加工上的this
+                    return this;
+                }
+            }
+            // 3. 数组
+            else if (typeof selector === "object" && "length" in selector && selector !== window) {
+                // console.log('是数组');
+                // 3.1 真数组
+                if(({}).toString.apply(selector) === "[object Array]"){
+                    [].push.apply(this, selector);
+                    return this;
+                }
+                // 3.2 伪数组
+                else {
+                    // 将自定义的伪数组转换为真数组
+                    var arr = [].slice.call(selector);
+                    // 将真数组转换为伪数组
+                    [].push.apply(this, arr);
                     return this;
                 }
             }
@@ -60,6 +92,9 @@
         return str.charAt(0) == '<' && str.charAt(str.length - 1) == ">" && str.length >= 3;
     }
     njQuery.trim = function (str) { // 去除前后空格，并实现trim的兼容性问题；trim()方法兼容ie9+版本
+        if(!njQuery.isString(str)){
+            return str;
+        }
         // 判断是否支持trim方法
         if (str.trim) {
             return str.trim();
