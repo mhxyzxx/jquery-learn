@@ -12,7 +12,7 @@
             // 此时此刻的this就是njQuery这个类
             // console.log(this);
             for(var key in obj){
-                // 相当于njQuery["isTest"] = function () {console.log("test");}
+                // 相当于njQuery["isTest"] = function () {console.log("test");} 相当于往njQuery这个类上添加了一个isTest静态方法
                 this[key] = obj[key];
             }
         }
@@ -47,6 +47,8 @@
         // 通过q.isDemo() 是调用的实例方法
 
         // 由jq库代码可知：如下：
+        // 说明：这里只不过把上面的两种情况合起来了，主要是看谁调用。如果是njQuery类调用，那么就是往类添加静态方法；如果是实例对象调用，那么就是
+        // 往实例对象中添加方法了。
         njQuery.extend = njQuery.prototype.extend = function (obj) {
             // console.log(this);
             for(var key in obj){

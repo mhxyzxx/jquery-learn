@@ -77,6 +77,7 @@
             console.log(res2); // [7, 9];
 
             // 如果想将伪数组转换为真数组那么可以使用如下方法：
+            // 如果slice方法什么参数都没有传递, 会将this数组中的元素放到一个新的数组中原样返回
             var arr = [].slice.call(obj);
             console.log(arr); // ["lnj", "33"]
 

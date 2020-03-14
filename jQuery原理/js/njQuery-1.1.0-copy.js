@@ -57,7 +57,6 @@
                 else {
                     // 1.根据传入的选择器找到对应的元素
                     var res = document.querySelectorAll(selector);
-                    // console.log(res);
                     // 2.将找到的元素添加到njQuery上
                     // for (var i = 0; i < res.length; i++) {
                     //     this[i] = res[i]
@@ -95,15 +94,62 @@
                 [].push.apply(this, arr);
                 // return this;
             }
-            // 5.除上述类型以外，也就是你传入什么，我就给他传入到jQuery对象里，并返回jQuery对象。
+            // 5.除上述类型以外
             else {
                 this[0] = selector;
                 this.length = 1;
                 // return this;
             }
+
             return this;
 
+        },
+        jquery: "1.1.0",
+        selector: "", // jQuery入口函数默认选择器为空
+        length: 0,// jQuery对象默认长度为0
+        // [].push找到数组的push方法
+        // 冒号前面的push将来由njQuery对象调用
+        // 相当于 [].push.apply(this);
+        push: [].push,
+        sort: [].sort,
+        splice: [].splice,
+        toArray: function () {
+            // 其实就是将伪数组转为真数组
+            return [].slice.call(this);
+        },
+        get: function (num) {
+            // 没有传递参数
+            if (arguments.length === 0) {
+                return this.toArray();
+            }
+            // 传递不是负数
+            else if (num >= 0) {
+                return this[num];
+            }
+            // 传递负数
+            else {
+                return this[this.length + num];
+            }
+        },
+        eq: function (num) {
+            // 没有传递参数
+            if (arguments.length === 0) {
+                // 也可return this
+                // 也可重新创建一个新的jQuery对象
+                return new njQuery();
+            } else {
+                return njQuery(this.get(num));
+            }
+        },
+        first: function () {
+            return this.eq(0);
+        },
+        last: function () {
+            return this.eq(-1);
         }
+
+
+
     }
     njQuery.extend = njQuery.prototype.extend = function (obj) {
         for (var key in obj) {
@@ -159,6 +205,20 @@
                         fn();
                     }
                 });
+            }
+        },
+        each: function (obj, fn) {
+            // 1. 判断是否是数组
+            if (njQuery.isArray(obj)) {
+                for (var i = 0; i < obj.length; i++) {
+                    fn(i, obj[i]);
+                }
+            }
+            // 2. 判断是否为对象
+            else if (njQuery.isObject(obj)) {
+                for (var key in obj) {
+                    fn(key, obj[key]);
+                }
             }
         }
     });

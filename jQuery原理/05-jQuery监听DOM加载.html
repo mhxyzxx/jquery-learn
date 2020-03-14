@@ -10,7 +10,7 @@
         onload事件会等到DOM元素加载完毕, 并且还会等到资源也加载完毕才会执行
         DOMContentLoaded事件只会等到DOM元素加载完毕就会执行回调
         所以DOMContentLoaded的性能比onload好
-        但addEventListener 事件监听函数有兼容性，IE8及IE8以下版本不支持
+        但addEventListener 事件监听函数有兼容性，只支持高级浏览器，不支持低级浏览器。它在IE8及IE8以下版本不支持
         */
         /*
         window.onload = function (ev) {
@@ -26,7 +26,7 @@
         */
 
 
-        // IE8及IE8以下版本不支持DOMContentLoaded事件
+        // IE8及IE8以下版本是没办法监听DOMContentLoaded这个事件的
         // document.attachEvent("DOMContentLoaded"，function(){}) 
         // 所以，通过下面状态码来实现：
 
