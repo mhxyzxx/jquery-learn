@@ -146,6 +146,9 @@
         },
         last: function () {
             return this.eq(-1);
+        },
+        each: function (fn) {
+            return njQuery.each(this, fn);
         }
 
 
@@ -211,15 +214,54 @@
             // 1. 判断是否是数组
             if (njQuery.isArray(obj)) {
                 for (var i = 0; i < obj.length; i++) {
-                    fn(i, obj[i]);
+                    // fn(i, obj[i]);
+                    var res = fn.call(obj[i], i, obj[i]);
+                   if(res === true){
+                       continue;
+                   }else if(res === false){
+                       break;
+                   }
                 }
             }
             // 2. 判断是否为对象
             else if (njQuery.isObject(obj)) {
                 for (var key in obj) {
-                    fn(key, obj[key]);
+                    // fn(key, obj[key]);
+                    var res = fn.call(obj[key], key, obj[key]);
+                    if(res === true){
+                        continue;
+                    }else if(res === false){
+                        break;
+                    }
                 }
             }
+            return obj;
+        },
+        map: function (obj, fn) {
+            var res = [];
+            // 1.判断是否是数组
+            if(njQuery.isArray(obj)){
+                for(var i = 0; i < obj.length; i++){
+                    var temp = fn(obj[i], i);
+                    // res.push(temp); // 当有值时，才添加到新数组中
+                    if(temp){
+                        res.push(temp);
+                    }
+                }
+
+            }
+            // 2.判断是否是对象
+            else if(njQuery.isObject(obj)){
+                for(var key in obj){
+                    var temp =fn(obj[key], key);
+                    // res.push(temp); // 当有值时，才添加到新数组中
+                    if(temp){
+                        res.push(temp);
+                    }
+                }
+
+            }
+            return res;
         }
     });
 
