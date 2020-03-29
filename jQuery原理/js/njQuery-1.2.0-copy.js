@@ -375,7 +375,32 @@
             })
             // 3.返回所有添加的元素
             return $(res);
-        }
+        },
+        prependTo: function (sele) {
+            // 1.统一的将传入的数据转换为jQuery对象
+            var $target = $(sele);
+            var $this = this;
+            var res = [];
+            // 2.遍历取出所有指定的元素
+            $.each($target, function (key, value) {
+                // 2.遍历取出所有的元素
+                $this.each(function (k, v) {
+                    // 3.判断当前是否是第0个指定的元素
+                    if(key === 0){
+                        // 直接添加
+                        value.insertBefore(v, value.firstChild);
+                        res.push(v);
+                    }else{
+                        // 先拷贝再添加
+                        var temp = v.cloneNode(true);
+                        value.insertBefore(temp, value.firstChild);
+                        res.push(temp);
+                    }
+                });
+            });
+            // 3.返回所有添加的元素
+            return $(res);
+        },
     });
 
 

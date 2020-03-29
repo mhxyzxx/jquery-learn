@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>10-jQueryDOM操作相关方法</title>
     <!--<script src="js/jquery-1.12.4.js"></script>-->
-    <script src="js/njQuery-1.2.0.js"></script>
+    <!-- <script src="js/njQuery-1.2.0.js"></script> -->
+    <script src="js/njQuery-1.2.0-copy.js"></script>
     <script>
         $(function () {
             /*
@@ -24,6 +26,10 @@
                 // $("p").prependTo(divs);
 
                 // console.log($("p").prependTo(".item"));
+
+                // var p = document.querySelector("p");
+                // var div = document.querySelector("div");
+                // prependTo(p, div);
             }
             function prependTo(source, target) {
                 /*
@@ -32,25 +38,25 @@
                 */
                 target.insertBefore(source, target.firstChild);
             }
-            var p = document.querySelector("p");
-            var div = document.querySelector("div");
-            // prependTo(p, div);
+
         });
     </script>
 </head>
+
 <body>
-<button>调用prependTo</button>
-<p>我是段落</p>
-<p>我是段落</p>
-<div class="item">
-    <li>1我是第1个li</li>
-    <li>1我是第2个li</li>
-    <li>1我是第3个li</li>
-</div>
-<div class="item">
-    <li>1我是第1个li</li>
-    <li>1我是第2个li</li>
-    <li>1我是第3个li</li>
-</div>
+    <button>调用prependTo</button>
+    <p>我是段落</p>
+    <p>我是段落</p>
+    <div class="item">
+        <li>1我是第1个li</li>
+        <li>1我是第2个li</li>
+        <li>1我是第3个li</li>
+    </div>
+    <div class="item">
+        <li>1我是第1个li</li>
+        <li>1我是第2个li</li>
+        <li>1我是第3个li</li>
+    </div>
 </body>
+
 </html>
