@@ -330,27 +330,51 @@
         },
         appendTo: function (sele) {
             // 1.统一的将传入的数据转换为jQuery对象
+            // var $target = $(sele);
+            // var $this = this; // 方法的调用者
+            // // 1.遍历取出所有指定的元素
+            // for (var i = 0; i < $target.length; i++) {
+            //     var targetEle = $target[i];
+            //     // 2.遍历取出所有的元素
+            //     for (var j = 0; j < $this.length; j++) {
+            //         var sourceEle = $this[j];
+
+            //         // 3.判断当前是否是第0个指定的元素
+            //         if (i === 0) {
+            //             // 直接添加
+            //             targetEle.appendChild(sourceEle);
+            //         } else {
+            //             // 先拷贝再添加
+            //             var temp = sourceEle.cloneNode(true);
+            //             targetEle.appendChild(temp);
+            //         }
+            //     }
+            // }
+
+            // 优化方法：
+            // 1.统一的将传入的数据转换为jQuery对象
             var $target = $(sele);
             var $this = this; // 方法的调用者
+            var res = [];
             // 1.遍历取出所有指定的元素
-            for (var i = 0; i < $target.length; i++) {
-                var targetEle = $target[i];
+            $.each($target, function (key, value) {
                 // 2.遍历取出所有的元素
-                for (var j = 0; j < $this.length; j++) {
-                    var sourceEle = $this[j];
-
+                $this.each(function (k, v) {
                     // 3.判断当前是否是第0个指定的元素
-                    if (i === 0) {
+                    if (key === 0) {
                         // 直接添加
-                        targetEle.appendChild(sourceEle);
+                        value.appendChild(v);
+                        res.push(v);
                     } else {
                         // 先拷贝再添加
-                        var temp = sourceEle.cloneNode(true);
-                        targetEle.appendChild(temp);
+                        var temp = v.cloneNode(true);
+                        value.appendChild(temp);
+                        res.push(temp);
                     }
-                }
-            }
-
+                });
+            })
+            // 3.返回所有添加的元素
+            return $(res);
         }
     });
 
