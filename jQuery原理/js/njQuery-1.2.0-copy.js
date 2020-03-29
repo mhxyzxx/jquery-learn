@@ -151,14 +151,15 @@
             return njQuery.each(this, fn);
         }
 
-
-
     }
+
     njQuery.extend = njQuery.prototype.extend = function (obj) {
         for (var key in obj) {
+            // console.log(this);
             this[key] = obj[key];
         }
     }
+    // 工具方法
     njQuery.extend({
         isString: function (str) { // 判断是不是字符串
             return typeof str == 'string';
@@ -216,11 +217,11 @@
                 for (var i = 0; i < obj.length; i++) {
                     // fn(i, obj[i]);
                     var res = fn.call(obj[i], i, obj[i]);
-                   if(res === true){
-                       continue;
-                   }else if(res === false){
-                       break;
-                   }
+                    if (res === true) {
+                        continue;
+                    } else if (res === false) {
+                        break;
+                    }
                 }
             }
             // 2. 判断是否为对象
@@ -228,9 +229,9 @@
                 for (var key in obj) {
                     // fn(key, obj[key]);
                     var res = fn.call(obj[key], key, obj[key]);
-                    if(res === true){
+                    if (res === true) {
                         continue;
-                    }else if(res === false){
+                    } else if (res === false) {
                         break;
                     }
                 }
@@ -240,22 +241,22 @@
         map: function (obj, fn) {
             var res = [];
             // 1.判断是否是数组
-            if(njQuery.isArray(obj)){
-                for(var i = 0; i < obj.length; i++){
+            if (njQuery.isArray(obj)) {
+                for (var i = 0; i < obj.length; i++) {
                     var temp = fn(obj[i], i);
                     // res.push(temp); // 当有值时，才添加到新数组中
-                    if(temp){
+                    if (temp) {
                         res.push(temp);
                     }
                 }
 
             }
             // 2.判断是否是对象
-            else if(njQuery.isObject(obj)){
-                for(var key in obj){
-                    var temp =fn(obj[key], key);
+            else if (njQuery.isObject(obj)) {
+                for (var key in obj) {
+                    var temp = fn(obj[key], key);
                     // res.push(temp); // 当有值时，才添加到新数组中
-                    if(temp){
+                    if (temp) {
                         res.push(temp);
                     }
                 }
@@ -264,8 +265,96 @@
             return res;
         }
     });
+    // DOM操作相关方法
+    njQuery.prototype.extend({
+        empty: function () {
+            // 1.遍历指定的元素
+            this.each(function (key, value) {
+                value.innerHTML = "";
+            });
+            // 2.方便链式编程
+            return this;
+        },
+        remove: function (sele) {
+            if (arguments.length === 0) {
+                // 1.遍历指定的元素
+                this.each(function (key, value) {
+                    // 根据遍历到的元素找到对应的父元素
+                    var parent = value.parentNode;
+                    // 通过父元素删除指定的元素
+                    parent.removeChild(value);
+                });
+            } else {
+                var $this = this;
+                // 1.根据传入的选择器找到对应的元素
+                $(sele).each(function (key, value) {
+                    // 2.遍历找到的元素, 获取对应的类型
+                    var type = value.tagName;
+                    // 3.遍历指定的元素
+                    $this.each(function (k, v) {
+                        // 4.获取指定元素的类型
+                        var t = v.tagName;
+                        // 5.判断找到元素的类型和指定元素的类型
+                        if (t === type) {
+                            // 根据遍历到的元素找到对应的父元素
+                            var parent = value.parentNode;
+                            // 通过父元素删除指定的元素
+                            parent.removeChild(value);
+                        }
+                    });
+                })
+            }
+            return this;
+        },
+        html: function (content) {
+            if (arguments.length === 0) {
+                return this[0].innerHTML;
+            } else {
+                this.each(function (key, value) {
+                    value.innerHTML = content;
+                })
+            }
+        },
+        text: function (content) {
+            if (arguments.length === 0) {
+                var res = "";
+                this.each(function (key, value) {
+                    res += value.innerText;
+                });
+                return res;
+            } else {
+                this.each(function (key, value) {
+                    value.innerText = content;
+                });
+            }
+        },
+        appendTo: function (sele) {
+            // 1.统一的将传入的数据转换为jQuery对象
+            var $target = $(sele);
+            var $this = this; // 方法的调用者
+            // 1.遍历取出所有指定的元素
+            for (var i = 0; i < $target.length; i++) {
+                var targetEle = $target[i];
+                // 2.遍历取出所有的元素
+                for (var j = 0; j < $this.length; j++) {
+                    var sourceEle = $this[j];
 
-    
+                    // 3.判断当前是否是第0个指定的元素
+                    if (i === 0) {
+                        // 直接添加
+                        targetEle.appendChild(sourceEle);
+                    } else {
+                        // 先拷贝再添加
+                        var temp = sourceEle.cloneNode(true);
+                        targetEle.appendChild(temp);
+                    }
+                }
+            }
+
+        }
+    });
+
+
 
 
     njQuery.prototype.init.prototype = njQuery.prototype;
