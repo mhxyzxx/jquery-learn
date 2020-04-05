@@ -3,20 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>11-jQueryDOM操作相关方法</title>
-    <!--<script src="js/jquery-1.12.4.js"></script>-->
-    <script src="js/njQuery-1.2.0.js"></script>
+    <!-- <script src="js/jquery-1.12.4.js"></script> -->
+    <!-- <script src="js/njQuery-1.2.0.js"></script> -->
+    <!-- <script src="js/njQuery-1.2.0-copy.js"></script> -->
     <script>
         $(function () {
             /*
              DOM 操作:
              6、指定元素.append.元素 ==> 将元素添加到指定元素内部的最后
+
+               分析：**prepend方法和prependTo方法两者的区别：
+               $("p").appendTo(".item");   $(".item").append("p");
+
+                1.它们的参数和调用者的顺序不一样；
+                2.它们对于参数（字符串）的处理不一样；如果是appendTo，它会把字符串当成选择器来处理。而append，不会把字符串当成选择器来处理。
+                3.它们的返回值不同；如果是appendTo，它会将所有要添加的元素，都放到一个数组中，然后再将数组包装成jQuery对象返回。如果是append，它不会添加，它会直接把调用者返回，也就是this直接返回。
              */
             var btn = document.getElementsByTagName("button")[0];
             btn.onclick = function () {
                 // 接收一个字符串
                 // $("p").appendTo(".item");
-                $(".item").append("p");
-                // $(".item").append("<span>我是span</span>");
+                // $(".item").append("p");
+                $(".item").append("<span>我是span</span>");
                 // console.log($(".item").append("p"));
 
                 // 接收一个jQuery对象  $($("div")); ==> jQuery

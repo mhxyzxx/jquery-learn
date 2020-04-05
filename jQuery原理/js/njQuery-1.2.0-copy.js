@@ -401,6 +401,15 @@
             // 3.返回所有添加的元素
             return $(res);
         },
+        append: function (sele) {
+            // 判断传入的参数是否是字符串
+            if(njQuery.isString(sele)){
+                this[0].innerHTML += sele;
+            }else{
+                $(sele).appendTo(this);
+            }
+            return this;
+        },
     });
 
 
