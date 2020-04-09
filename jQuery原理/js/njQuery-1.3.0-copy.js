@@ -589,7 +589,32 @@
                 });
             }
             return this;
-        }
+        },
+        prop: function (attr, value) {
+            // 1.判断是否是字符串
+            if(njQuery.isString(attr)){
+                // 判断是一个字符串还是两个字符串
+                if(arguments.length === 1){
+                    return this[0][attr];
+                }else{
+                    this.each(function (key, ele) {
+                        ele[attr] = value;
+                    });
+                }
+            }
+            // 2.判断是否是对象
+            else if(njQuery.isObject(attr)){
+                var $this = this;
+                // 遍历取出所有属性节点的名称和对应的值
+                $.each(attr, function (key, value) {
+                    // 遍历取出所有的元素
+                    $this.each(function (k, ele) {
+                        ele[key] = value;
+                    });
+                });
+            }
+            return this;
+        },
     });
 
     njQuery.prototype.init.prototype = njQuery.prototype;
