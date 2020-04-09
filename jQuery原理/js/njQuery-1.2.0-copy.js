@@ -263,6 +263,23 @@
 
             }
             return res;
+        },
+        // 来源: http://www.w3school.com.cn/xmldom/prop_node_nextsibling.asp
+        get_nextsibling: function (n) {
+            var x = n.nextSibling;
+            while (x != null && x.nodeType!=1)
+            {
+                x=x.nextSibling;
+            }
+            return x;
+        },
+        get_previoussibling: function (n) {
+            var x=n.previousSibling;
+            while (x != null && x.nodeType!=1)
+            {
+                x=x.previousSibling;
+            }
+            return x;
         }
     });
     // DOM操作相关方法
@@ -386,11 +403,11 @@
                 // 2.遍历取出所有的元素
                 $this.each(function (k, v) {
                     // 3.判断当前是否是第0个指定的元素
-                    if(key === 0){
+                    if (key === 0) {
                         // 直接添加
                         value.insertBefore(v, value.firstChild);
                         res.push(v);
-                    }else{
+                    } else {
                         // 先拷贝再添加
                         var temp = v.cloneNode(true);
                         value.insertBefore(temp, value.firstChild);
@@ -403,18 +420,18 @@
         },
         append: function (sele) {
             // 判断传入的参数是否是字符串
-            if(njQuery.isString(sele)){
+            if (njQuery.isString(sele)) {
                 this[0].innerHTML += sele;
-            }else{
+            } else {
                 $(sele).appendTo(this);
             }
             return this;
         },
         prepend: function (sele) {
             // 判断传入的参数是否是字符串
-            if(njQuery.isString(sele)){
+            if (njQuery.isString(sele)) {
                 this[0].innerHTML = sele + this[0].innerHTML;
-            }else{
+            } else {
                 $(sele).prependTo(this);
             }
             return this;
@@ -430,11 +447,11 @@
                 // 2.遍历取出所有的元素
                 $this.each(function (k, v) {
                     // 3.判断当前是否是第0个指定的元素
-                    if(key === 0){
+                    if (key === 0) {
                         // 直接添加
                         parent.insertBefore(v, value);
                         res.push(v);
-                    }else{
+                    } else {
                         // 先拷贝再添加
                         var temp = v.cloneNode(true);
                         parent.insertBefore(temp, value);
@@ -445,10 +462,109 @@
             // 3.返回所有添加的元素
             return $(res);
         },
+        insertAfter: function (sele) {
+            // 1.统一的将传入的数据转换为jQuery对象
+            var $target = $(sele);
+            var $this = this;
+            var res = [];
+            // 2.遍历取出所有指定的元素
+            $.each($target, function (key, value) {
+                var parent = value.parentNode;
+                var nextNode = $.get_nextsibling(value);
+                // 2.遍历取出所有的元素
+                $this.each(function (k, v) {
+                    // 3.判断当前是否是第0个指定的元素
+                    if (key === 0) {
+                        // 直接添加
+                        parent.insertBefore(v, nextNode);
+                        res.push(v);
+                    } else {
+                        // 先拷贝再添加
+                        var temp = v.cloneNode(true);
+                        parent.insertBefore(temp, nextNode);
+                        res.push(temp);
+                    }
+                });
+            });
+            // 3.返回所有添加的元素
+            return $(res);
+        },
+        replaceAll: function (sele) {
+            // 1.统一的将传入的数据转换为jQuery对象
+            var $target = $(sele);
+            var $this = this;
+            var res = [];
+            // 2.遍历取出所有指定的元素
+            $.each($target, function (key, value) {
+                var parent = value.parentNode;
+                // 2.遍历取出所有的元素
+                $this.each(function (k, v) {
+                    // 3.判断当前是否是第0个指定的元素
+                    if (key === 0) {
+                        // 1.将元素插入到指定元素的前面
+                        $(v).insertBefore(value);
+                        // 2.将指定元素删除
+                        $(value).remove();
+                        res.push(v);
+                    } else {
+                        // 先拷贝再添加
+                        var temp = v.cloneNode(true);
+                        // 1.将元素插入到指定元素的前面
+                        $(temp).insertBefore(value);
+                        // 2.将指定元素删除
+                        $(value).remove();
+                        res.push(temp);
+                    }
+                });
+            });
+            // 3.返回所有添加的元素
+            return $(res);
+        }
     });
-
-
-
+    // 筛选相关方法
+    njQuery.prototype.extend({
+        next: function (sele) {
+            var res = [];
+            if (arguments.length === 0) {
+                // 返回所有找到的
+                this.each(function (key, value) {
+                    var temp = njQuery.get_nextsibling(value);
+                    if (temp != null) {
+                        res.push(temp);
+                    }
+                });
+            } else {
+                // 返回指定找到的
+                this.each(function (key, value) {
+                    var temp = njQuery.get_nextsibling(value)
+                    $(sele).each(function (k, v) {
+                        if (v == null || v !== temp) return true;
+                        res.push(v);
+                    });
+                });
+            }
+            return $(res);
+        },
+        prev: function (sele) {
+            var res = [];
+            if (arguments.length === 0) {
+                this.each(function (key, value) {
+                    var temp = njQuery.get_previoussibling(value);
+                    if (temp == null) return true;
+                    res.push(temp);
+                });
+            } else {
+                this.each(function (key, value) {
+                    var temp = njQuery.get_previoussibling(value);
+                    $(sele).each(function (k, v) {
+                        if (v == null || temp !== v) return true;
+                        res.push(v);
+                    })
+                });
+            }
+            return $(res);
+        }
+    });
 
     njQuery.prototype.init.prototype = njQuery.prototype;
     window.njQuery = window.$ = njQuery;
