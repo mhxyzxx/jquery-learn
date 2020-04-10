@@ -657,6 +657,25 @@
                 return this;
             }
         },
+        hasClass: function (name) {
+            var flag = false;
+            if(arguments.length === 0){
+                return flag;
+            }else{
+                this.each(function (key, ele) {
+                    // 1.获取元素中class保存的值
+                    var className = " "+ele.className+" ";
+                    // 2.给指定字符串的前后也加上空格
+                    name = " "+name+" ";
+                    // 3.通过indexOf判断是否包含指定的字符串
+                    if(className.indexOf(name) != -1){
+                        flag = true;
+                        return false; // 循环中return false相当于break;
+                    }
+                });
+                return flag;
+            }
+        },
     });
 
     njQuery.prototype.init.prototype = njQuery.prototype;
