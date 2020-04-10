@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>20-jQuery属性操作相关方法</title>
     <!--<script src="../jQuery原理/js/jquery-1.12.4.js"></script>-->
-    <script src="js/njQuery-1.3.0.js"></script>
+    <!-- <script src="js/njQuery-1.3.0.js"></script> -->
+    <script src="js/njQuery-1.3.0-copy.js"></script>
     <script>
         $(function () {
             /*
@@ -13,11 +14,11 @@
 
             // 传递参数, 如果元素中没有指定类就添加, 有就不添加
             // 会返回this方便链式编程
-            // console.log($("div").addClass("abc"));
-            // console.log($("div").addClass("abc def"));
+            console.log($("div").addClass("abc"));
+            console.log($("div").addClass("abc def"));
 
             // 没有传递参数,不做任何操作,返回this
-            console.log($("div").addClass());
+            // console.log($("div").addClass());
 
             // "aabb" + " " + "abc" = "aabb abc"
         });

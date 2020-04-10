@@ -648,9 +648,9 @@
             return this;
         },
         val: function (content) {
-            if(arguments.length === 0){
+            if (arguments.length === 0) {
                 return this[0].value;
-            }else{
+            } else {
                 this.each(function (key, ele) {
                     ele.value = content;
                 });
@@ -659,22 +659,39 @@
         },
         hasClass: function (name) {
             var flag = false;
-            if(arguments.length === 0){
+            if (arguments.length === 0) {
                 return flag;
-            }else{
+            } else {
                 this.each(function (key, ele) {
                     // 1.获取元素中class保存的值
-                    var className = " "+ele.className+" ";
+                    var className = " " + ele.className + " ";
                     // 2.给指定字符串的前后也加上空格
-                    name = " "+name+" ";
+                    name = " " + name + " ";
                     // 3.通过indexOf判断是否包含指定的字符串
-                    if(className.indexOf(name) != -1){
+                    if (className.indexOf(name) != -1) {
                         flag = true;
                         return false; // 循环中return false相当于break;
                     }
                 });
                 return flag;
             }
+        },
+        addClass: function (name) {
+            if (arguments.length === 0) return this;
+
+            // 1.对传入的类名进行切割
+            var names = name.split(" ");
+            // 2.遍历取出所有的元素
+            this.each(function (key, ele) {
+                // 3.遍历数组取出每一个类名
+                $.each(names, function (k, value) {
+                    // 4.判断指定元素中是否包含指定的类名
+                    if (!$(ele).hasClass(value)) {
+                        ele.className = ele.className + " " + value;
+                    }
+                });
+            });
+            return this;
         },
     });
 
