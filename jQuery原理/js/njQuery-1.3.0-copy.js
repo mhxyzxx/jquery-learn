@@ -278,6 +278,13 @@
                 x = x.previousSibling;
             }
             return x;
+        },
+        getStyle: function (dom, styleName) {
+            if (window.getComputedStyle) {
+                return window.getComputedStyle(dom)[styleName];
+            } else {
+                return dom.currentStyle[styleName];
+            }
         }
     });
     // DOM操作相关方法
@@ -567,18 +574,18 @@
     njQuery.prototype.extend({
         attr: function (attr, value) {
             // 1.判断是否是字符串
-            if(njQuery.isString(attr)){
+            if (njQuery.isString(attr)) {
                 // 判断是一个字符串还是两个字符串
-                if(arguments.length === 1){
+                if (arguments.length === 1) {
                     return this[0].getAttribute(attr);
-                }else{
+                } else {
                     this.each(function (key, ele) {
                         ele.setAttribute(attr, value);
                     });
                 }
             }
             // 2.判断是否是对象
-            else if(njQuery.isObject(attr)){
+            else if (njQuery.isObject(attr)) {
                 var $this = this;
                 // 遍历取出所有属性节点的名称和对应的值
                 $.each(attr, function (key, value) {
@@ -592,18 +599,18 @@
         },
         prop: function (attr, value) {
             // 1.判断是否是字符串
-            if(njQuery.isString(attr)){
+            if (njQuery.isString(attr)) {
                 // 判断是一个字符串还是两个字符串
-                if(arguments.length === 1){
+                if (arguments.length === 1) {
                     return this[0][attr];
-                }else{
+                } else {
                     this.each(function (key, ele) {
                         ele[attr] = value;
                     });
                 }
             }
             // 2.判断是否是对象
-            else if(njQuery.isObject(attr)){
+            else if (njQuery.isObject(attr)) {
                 var $this = this;
                 // 遍历取出所有属性节点的名称和对应的值
                 $.each(attr, function (key, value) {
@@ -614,6 +621,41 @@
                 });
             }
             return this;
+        },
+        css: function (attr, value) {
+            // 1.判断是否是字符串
+            if (njQuery.isString(attr)) {
+                // 判断是一个字符串还是两个字符串
+                if (arguments.length === 1) {
+                    return njQuery.getStyle(this[0], attr);
+                } else {
+                    this.each(function (key, ele) {
+                        ele.style[attr] = value;
+                    });
+                }
+            }
+            // 2.判断是否是对象
+            else if (njQuery.isObject(attr)) {
+                var $this = this;
+                // 遍历取出所有属性节点的名称和对应的值
+                $.each(attr, function (key, value) {
+                    // 遍历取出所有的元素
+                    $this.each(function (k, ele) {
+                        ele.style[key] = value;
+                    });
+                });
+            }
+            return this;
+        },
+        val: function (content) {
+            if(arguments.length === 0){
+                return this[0].value;
+            }else{
+                this.each(function (key, ele) {
+                    ele.value = content;
+                });
+                return this;
+            }
         },
     });
 
