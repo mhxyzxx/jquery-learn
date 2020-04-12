@@ -693,6 +693,27 @@
             });
             return this;
         },
+        removeClass: function (name) {
+            if (arguments.length === 0) {
+                this.each(function (key, ele) {
+                    ele.className = "";
+                });
+            } else {
+                // 1.对传入的类名进行切割
+                var names = name.split(" ");
+                // 2.遍历取出所有的元素
+                this.each(function (key, ele) {
+                    // 3.遍历数组取出每一个类名
+                    $.each(names, function (k, value) {
+                        // 4.判断指定元素中是否包含指定的类名
+                        if ($(ele).hasClass(value)) {
+                            ele.className = (" " + ele.className + " ").replace(" " + value + " ", "");
+                        }
+                    });
+                });
+            }
+            return this;
+        },
     });
 
     njQuery.prototype.init.prototype = njQuery.prototype;
