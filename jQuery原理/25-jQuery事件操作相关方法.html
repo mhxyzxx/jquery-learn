@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>25-jQuery事件操作相关方法</title>
-    <script src="../jQuery原理/js/jquery-1.12.4.js"></script>
+    <!-- <script src="../jQuery原理/js/jquery-1.12.4.js"></script> -->
     <!--<script src="js/njQuery-1.4.0.js"></script>-->
+    <script src="js/njQuery-1.4.0-copy.js"></script>
     <script>
         $(function () {
             /*
@@ -16,9 +17,10 @@
             2.注册多个不同类型事件, 后注册的不会覆盖先注册的
             */
 
-            $("button").on("click", function () {
+            var res = $("button").on("click", function () {
                 alert("hello click1");
             });
+            console.log(res);
 
             $("button").on("click", function () {
                 alert("hello click2");

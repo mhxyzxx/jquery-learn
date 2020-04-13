@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>24-jQuery事件操作相关方法</title>
     <!--<script src="../jQuery原理/js/jquery-1.12.4.js"></script>-->
-    <script src="js/njQuery-1.4.0.js"></script>
+    <!-- <script src="js/njQuery-1.4.0.js"></script> -->
+    <!-- <script src="js/njQuery-1.4.0-copy.js"></script> -->
     <script>
         $(function () {
             /*
@@ -32,16 +34,95 @@
             //     alert("hello mouseleave");
             // });
 
+
+            // -----------------------------------------------------------
+            // 问题1: 以下方法是为了解决在IE低版本下，能保证它按照事件注册的顺序来执行。
+            // 给要绑定事件的元素添加一个自定义属性，它是一个数组形式的。我们把事件依次存入到该数组中，然后，遍历数组，通过索引来
+            // 依次取出事件执行，那么，这样不管高级或低级的浏览器都能按照顺序来执行。
+            // 问题2: 当点击事件时，不管什么事件都把函数存储到同一个数组中了。那么，如下移入移除到事件也添加里面了，这样，当只要
+            // 我们点击click事件，也会触发移入移除事件当。这跟官方效果不一样。该怎么解决？
+
+            // 解决问题1:
+            // var btn = document.querySelector("button");
+            // // console.log(btn);
+            // function addEvent(dom, name, callBack) {
+            //     // btn, "click", test1
+            //     if (!dom.eventsCache) {
+            //         // console.log(1);
+            //         dom.eventsCache = [];
+            //         dom.eventsCache.push(callBack);
+            //         // console.log(dom.eventsCache);
+            //         if (dom.addEventListener) { // 做兼容处理
+            //             console.log(3);
+            //             dom.addEventListener(name, function () {
+            //                 for (var i = 0; i < dom.eventsCache.length; i++) {
+            //                     dom.eventsCache[i]();
+            //                 }
+            //             });
+            //         } else {
+            //             dom.attachEvent("on" + name, function () {
+            //                 for (var i = 0; i < dom.eventsCache.length; i++) {
+            //                     dom.eventsCache[i]();
+            //                 }
+            //             });
+            //         }
+
+            //     } else {
+            //         // console.log(2);
+            //         dom.eventsCache.push(callBack);
+            //     }
+
+            // }
+            // function test1() {
+            //     alert("click1");
+            // }
+            // function test2() {
+            //     alert("click2");
+            // }
+            // function test3() {
+            //     alert("mouseenter");
+            // }
+            // function test4() {
+            //     alert("mouseleave");
+            // }
+            // // btn.eventsCache = [test1, test2];
+            // addEvent(btn, "click", test1);
+            // addEvent(btn, "click", test2);
+            // addEvent(btn, "mouseenter", test3);
+            // addEvent(btn, "mouseleave", test4);
+            // 以上代码就遇到了问题2
+            // 解决如下：
+            //    ---------------------------------------------------------
+            // 解决方法：就是把自定义属性生明为一个对象。看这个对象中有没有事件属性当名字，如果没有，就给他添加一个事件属性名，且该属性名为数组。并把事件名放到数组中。
+            //         如果有就直接把事件名push到事件数组中。
+            // if (!dom.eventsCache) {
+            //     dom.eventsCache = {}; //btn.eventsCache = {}
+            // }
+            // if (!dom.eventsCache[name]) {
+            //     /*
+            //     btn.eventsCache = {
+            //         click: [test1, test2],
+            //         mouseenter: [test3],
+            //         mouseleave: [test4]
+            //     }
+            //     */
+            //     dom.eventsCache[name] = [];
+            //     dom.eventsCache[name].push(callBack);
+            // } else {
+            //     dom.eventsCache[name].push(callBack);
+            // }
+            
+            //具体代码如下：
             var btn = document.querySelector("button");
             function addEvent(dom, name, callBack) {
                 // btn, "click", test1
                 // btn, "click", test2
                 // btn, "mouseenter", test3
                 // btn, "mouseleave", test4
-                if(!dom.eventsCache){
+                if (!dom.eventsCache) {
                     dom.eventsCache = {}; //btn.eventsCache = {}
                 }
-                if(!dom.eventsCache[name]){
+                if (!dom.eventsCache[name]) {
                     /*
                     btn.eventsCache = {
                         click: [test1, test2],
@@ -51,37 +132,37 @@
                     */
                     dom.eventsCache[name] = [];
                     dom.eventsCache[name].push(callBack);
-                    if(dom.addEventListener){
+                    if (dom.addEventListener) {
                         // 1. click  3.mouseenter 4.mouseleave
                         dom.addEventListener(name, function () {
-                            for(var i = 0; i < dom.eventsCache[name].length; i++){
+                            for (var i = 0; i < dom.eventsCache[name].length; i++) {
                                 dom.eventsCache[name][i]();
                             }
                         });
-                    }else{
-                        dom.attachEvent("on"+name, function () {
-                            for(var i = 0; i < dom.eventsCache[name].length; i++){
+                    } else {
+                        dom.attachEvent("on" + name, function () {
+                            for (var i = 0; i < dom.eventsCache[name].length; i++) {
                                 dom.eventsCache[name][i]();
                             }
                         });
                     }
-                }else{
+                } else {
                     dom.eventsCache[name].push(callBack);
                 }
             }
-            function test1(){
+            function test1() {
                 alert("click1");
             }
-            function test2(){
+            function test2() {
                 alert("click2");
             }
-            function test3(){
+            function test3() {
                 alert("mouseenter");
             }
-            function test4(){
+            function test4() {
                 alert("mouseleave");
             }
-            // btn.eventsCache = [test1, test2];
+            btn.eventsCache = [test1, test2];
             addEvent(btn, "click", test1);
             addEvent(btn, "click", test2);
             addEvent(btn, "mouseenter", test3);
@@ -89,8 +170,10 @@
         });
     </script>
 </head>
+
 <body>
-<button>我是按钮1</button>
-<button>我是按钮2</button>
+    <button>我是按钮1</button>
+    <button>我是按钮2</button>
 </body>
+
 </html>
