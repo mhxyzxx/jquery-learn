@@ -773,6 +773,32 @@
             });
             return this;
         },
+        off: function (name, callBack) {
+            // 1.判断是否没有传入参数
+            if(arguments.length === 0){
+                this.each(function (key, ele) {
+                    ele.eventsCache = {};
+                });
+            }
+            // 2.判断是否传入了一个参数
+            else if(arguments.length === 1){
+                this.each(function (key, ele) {
+                    ele.eventsCache[name] = [];
+                });
+            }
+            // 3.判断是否传入了两个参数
+            else if(arguments.length === 2){
+                this.each(function (key, ele) {
+                    njQuery.each(ele.eventsCache[name], function (index, method) {
+                        // 判断当前遍历到的方法和传入的方法是否相同
+                        if(method === callBack){
+                            ele.eventsCache[name].splice(index,  1);
+                        }
+                    });
+                });
+            }
+            return this;
+        }
     });
 
     njQuery.prototype.init.prototype = njQuery.prototype;
