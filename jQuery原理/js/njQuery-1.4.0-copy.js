@@ -531,6 +531,33 @@
             });
             // 3.返回所有添加的元素
             return $(res);
+        },
+        clone: function (deep) {
+            var res = [];
+            // 判断是否是深复制
+            if(deep){
+                // 深复制
+                this.each(function (key, ele) {
+                    var temp = ele.cloneNode(true);
+                    // 遍历元素中的eventsCache对象
+                    njQuery.each(ele.eventsCache, function (name, array) {
+                        // 遍历事件对应的数组
+                        njQuery.each(array, function (index, method) {
+                            // 给复制的元素添加事件
+                            $(temp).on(name, method);
+                        });
+                    });
+                    res.push(temp);
+                });
+                return $(res);
+            }else{
+                // 浅复制
+                this.each(function (key, ele) {
+                    var temp = ele.cloneNode(true);
+                    res.push(temp);
+                });
+                return $(res);
+            }
         }
     });
     // 筛选相关方法

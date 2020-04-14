@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>27-jQueryDOM操作相关方法</title>
     <!--<script src="../jQuery原理/js/jquery-1.12.4.js"></script>-->
-    <script src="js/njQuery-1.4.0.js"></script>
+    <!-- <script src="js/njQuery-1.4.0.js"></script> -->
+    <script src="js/njQuery-1.4.0-copy.js"></script>
     <script>
         $(function () {
             /*
@@ -30,17 +31,18 @@
                 click: [];
             };
             */
+           // 给元素添加默认事件：
             $("li").on("click", function () {
                 alert($(this).html());
             });
 
-            var li = document.querySelector("li");
-            li.onclick = function (ev) {
-                alert(123);
-            }
-            var temp = JSON.parse(JSON.stringify(li));
-            var ul = document.querySelector("ul");
-            ul.appendChild(temp);
+            // var li = document.querySelector("li");
+            // li.onclick = function (ev) {
+            //     alert(123);
+            // }
+            // var temp = JSON.parse(JSON.stringify(li));
+            // var ul = document.querySelector("ul");
+            // ul.appendChild(temp);
         });
     </script>
 </head>
